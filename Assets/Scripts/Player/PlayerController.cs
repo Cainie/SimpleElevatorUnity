@@ -14,7 +14,7 @@ namespace Player{
             if (!Input.GetMouseButtonDown(0) && !Input.GetKeyDown(KeyCode.E)) return;
             var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out var hit, maxRaycastDistance)) return;
-            var interactibleHitObject = hit.collider.GetComponent<Interactible>();
+            var interactibleHitObject = hit.collider.GetComponent<InteractibleButton>();
             if (interactibleHitObject == null){
                 return;
             }
