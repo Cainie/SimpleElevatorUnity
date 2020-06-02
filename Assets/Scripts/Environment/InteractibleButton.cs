@@ -1,24 +1,33 @@
 ﻿using System.Collections;
 using UnityEngine;
+using ElevatorSettings;
 
 namespace Environment{
     public class InteractibleButton : MonoBehaviour{
-        [SerializeField] private float lerpSpeed;
-        [SerializeField] private Rigidbody elevatorRigidbody;
         [SerializeField] private Transform targetTransform;
-        
-        public virtual void Interact(){
+        private ElevatorSettings.ElevatorSettings _elevatorSettings;
+
+        public ElevatorSettings.ElevatorSettings ElevatorSettings{
+            set => _elevatorSettings = value;
         }
 
+        public virtual void Interact(){
+            if (_elevatorSettings.ElevatorIsMoving){ return; }
+            StartCoroutine(MoveElevatorToTargetTransform());
+        }
+        
+        
         protected IEnumerator MoveElevatorToTargetTransform(){
+            _elevatorSettings.ElevatorIsMoving = true;
             var targetPosition = targetTransform.position;
-            var elevatorPosition = elevatorRigidbody.transform.position;
+            var elevatorPosition = _elevatorSettings.ElevatorRigidbody.transform.position;
             while (elevatorPosition != targetPosition){
-                elevatorPosition = elevatorRigidbody.transform.position;
-                elevatorRigidbody.MovePosition(Vector3.MoveTowards(elevatorPosition,targetPosition,
-                    Time.fixedDeltaTime * lerpSpeed));
+                elevatorPosition = _elevatorSettings.ElevatorRigidbody.transform.position;
+                _elevatorSettings.ElevatorRigidbody.MovePosition(Vector3.MoveTowards(elevatorPosition,targetPosition,
+                    Time.fixedDeltaTime * _elevatorSettings.ElevatorSpeed));
                 yield return null;
             }
+            _elevatorSettings.ElevatorIsMoving = false;
         }
     }
 }

@@ -390,8 +390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ec196bd9a362549ac62251e1787adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpSpeed: 4
-  elevatorRigidbody: {fileID: 1583432701}
   targetTransform: {fileID: 492274887}
 --- !u!43 &151392335
 Mesh:
@@ -1733,8 +1731,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3218f75e476f34094ceeb029a38d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpSpeed: 4
-  elevatorRigidbody: {fileID: 1583432701}
   targetTransform: {fileID: 1334903470}
 --- !u!1 &642052266
 GameObject:
@@ -4962,8 +4958,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3218f75e476f34094ceeb029a38d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpSpeed: 4
-  elevatorRigidbody: {fileID: 1583432701}
   targetTransform: {fileID: 492274887}
 --- !u!1 &1075757110
 GameObject:
@@ -5071,8 +5065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ec196bd9a362549ac62251e1787adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpSpeed: 4
-  elevatorRigidbody: {fileID: 1583432701}
   targetTransform: {fileID: 1334903470}
 --- !u!1 &1093309623
 GameObject:
@@ -5492,8 +5484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3218f75e476f34094ceeb029a38d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpSpeed: 4
-  elevatorRigidbody: {fileID: 1583432701}
   targetTransform: {fileID: 914024853}
 --- !u!1 &1245814876
 GameObject:
@@ -8515,6 +8505,7 @@ GameObject:
   - component: {fileID: 1583432697}
   - component: {fileID: 1583432696}
   - component: {fileID: 1583432701}
+  - component: {fileID: 1583432702}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
@@ -10571,6 +10562,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1583432702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583432695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f710daef1bf5f547b9eb5ae44463d63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elevatorSpeed: 4
+  elevatorButtons:
+  - {fileID: 1706917034}
+  - {fileID: 46627247}
+  - {fileID: 1075757115}
+  - {fileID: 1162783835}
+  - {fileID: 1035552638}
+  - {fileID: 538182985}
 --- !u!1 &1585746026
 GameObject:
   m_ObjectHideFlags: 0
@@ -10987,8 +10998,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ec196bd9a362549ac62251e1787adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpSpeed: 4
-  elevatorRigidbody: {fileID: 1583432701}
   targetTransform: {fileID: 914024853}
 --- !u!43 &1743424039
 Mesh:

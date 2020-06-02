@@ -5,7 +5,7 @@ namespace Environment{
     public class ElevatorButton : InteractibleButton{
         
         public override void Interact(){
-            StartCoroutine(MoveElevatorToTargetTransform());
+            base.Interact();
         }
 
         
