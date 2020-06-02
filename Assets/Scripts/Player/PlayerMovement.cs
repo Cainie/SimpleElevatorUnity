@@ -6,8 +6,10 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour{
 
     [SerializeField] private float speed;
+    private float _gravityForce = 9.81f;
     private Rigidbody _playerRigidbody;
     private Transform _playerTransform;
+    
 
     private void Start()
     {
@@ -15,12 +17,14 @@ public class PlayerMovement : MonoBehaviour{
         _playerRigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Update(){
+    private void FixedUpdate(){
         var xAxis = Input.GetAxis("Horizontal");
         var zAxis = Input.GetAxis("Vertical");
+        var moveVector = _playerTransform.right * xAxis + _playerTransform.forward * zAxis ;
+        moveVector *= speed;
+        moveVector += -_playerTransform.up * _gravityForce;
+        _playerRigidbody.velocity = moveVector;
 
-        
-        var moveVector = _playerTransform.right * xAxis + _playerTransform.forward * zAxis;
-        _playerRigidbody.velocity = moveVector * speed;
+        //_playerRigidbody.MovePosition(_playerTransform.position + Time.fixedDeltaTime * speed * moveVector);
     }
 }
