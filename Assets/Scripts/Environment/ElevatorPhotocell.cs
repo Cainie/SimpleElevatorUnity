@@ -1,14 +1,20 @@
-﻿using System;
-using ElevatorSettings;
+﻿using ElevatorSettings;
 using UnityEngine;
 
 namespace Environment{
     public class ElevatorPhotocell : MonoBehaviour{
-        [SerializeField] private ElevatorMovementManager elevatorMovementManager;
+        private ElevatorMovementManager _elevatorMovementManager;
+        private ElevatorParameters _elevatorParameters;
+        
+        public void SetElevatorScripts(ElevatorMovementManager elevatorMovementManager,
+                                       ElevatorParameters elevatorParameters){
+            _elevatorMovementManager = elevatorMovementManager;
+            _elevatorParameters = elevatorParameters;
+        }
 
         private void OnTriggerStay(Collider other){
-            if (elevatorMovementManager.DoorsClosing){
-                elevatorMovementManager.OpenClosingDoors();
+            if (_elevatorParameters.DoorsClosing){
+                _elevatorMovementManager.OpenClosingDoors();
             }
             
         }
