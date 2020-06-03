@@ -11,6 +11,7 @@ namespace ElevatorSettings{
         [SerializeField] private Animator doorAnimator;
         [SerializeField] private float doorAnimationLength;
         [SerializeField] private float timeToCloseDoors;
+        [SerializeField] private float timeToStartMusic;
         [SerializeField] private Dictionary<int, Transform> floorTransforms;
         private int _currentlyActiveFloor = 3;
         private Rigidbody _elevatorRigidbody;
@@ -34,6 +35,8 @@ namespace ElevatorSettings{
         public float DoorAnimationLength => doorAnimationLength;
 
         public float TimeToCloseDoors => timeToCloseDoors;
+
+        public float TimeToStartMusic => timeToStartMusic;
 
         public Dictionary<int, Transform> FloorTransforms => floorTransforms;
 
