@@ -1,44 +1,30 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Environment;
+﻿using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ElevatorSettings{
+    [RequireComponent(typeof(ElevatorParameters))]
     public class ElevatorMovementManager : SerializedMonoBehaviour{
-        [SerializeField] private float elevatorSpeed;
-        [SerializeField] private List<InteractibleButton> elevatorButtons;
-        [SerializeField] private Animator doorAnimator;
-        [SerializeField] private float doorAnimationLength;
-        [SerializeField] private float timeToCloseDoors;
-        [SerializeField] private Dictionary<int, Transform> floorTransforms;
-        private int _currentlyActiveFloor = 3;
-        private Rigidbody _elevatorRigidbody;
-        private bool _elevatorIsMoving;
-        private bool _doorsOpen = true;
-        private bool _doorsClosing;
-        private bool _doorsMoving;
+        
+        private ElevatorParameters _elevatorParameters;
         
         private void Awake(){
-            foreach (var interactibleButton in elevatorButtons){
-                interactibleButton.ElevatorMovementManager = this;
+            _elevatorParameters = GetComponent<ElevatorParameters>();
+            foreach (var interactibleButton in _elevatorParameters.ElevatorButtons){
+                interactibleButton.SetElevatorScripts(this,_elevatorParameters);
             }
-        }
-
-        private void Start(){
-            _elevatorRigidbody = GetComponent<Rigidbody>();
+            _elevatorParameters.ElevatorPhotocell.SetElevatorScripts(this,_elevatorParameters);
         }
 
         public void ElevatorButtonClicked(int floorIndex){
-            if (floorIndex == _currentlyActiveFloor){
-                if (!_doorsOpen){
+            if (floorIndex == _elevatorParameters.CurrentlyActiveFloor){
+                if (!_elevatorParameters.DoorsOpen){
                     StartCoroutine(OpenDoors());
                 }
                 return;
             }
             
-            if (!_doorsOpen){
+            if (!_elevatorParameters.DoorsOpen){
                 StartCoroutine(MoveElevatorToTargetTransform(floorIndex));
                 return;
             }
@@ -47,19 +33,19 @@ namespace ElevatorSettings{
         }
 
         private IEnumerator MoveElevatorToTargetTransform(int floorIndex){
-            _elevatorIsMoving = true;
-            var targetTransform = floorTransforms[floorIndex];
+            _elevatorParameters.ElevatorIsMoving = true;
+            var targetTransform = _elevatorParameters.FloorTransforms[floorIndex];
             var targetPosition = targetTransform.position;
-            var elevatorPosition = _elevatorRigidbody.transform.position;
+            var elevatorPosition = _elevatorParameters.ElevatorRigidbody.transform.position;
             while (elevatorPosition != targetPosition){
-                elevatorPosition = _elevatorRigidbody.transform.position;
-                _elevatorRigidbody.MovePosition(Vector3.MoveTowards(elevatorPosition,targetPosition,
-                    Time.fixedDeltaTime * elevatorSpeed));
+                elevatorPosition = _elevatorParameters.ElevatorRigidbody.transform.position;
+                _elevatorParameters.ElevatorRigidbody.MovePosition(Vector3.MoveTowards(elevatorPosition,targetPosition,
+                    Time.fixedDeltaTime * _elevatorParameters.ElevatorSpeed));
                 yield return null;
             }
             StartCoroutine(OpenDoors());
-            _elevatorIsMoving = false;
-            _currentlyActiveFloor = floorIndex;
+            _elevatorParameters.ElevatorIsMoving = false;
+            _elevatorParameters.CurrentlyActiveFloor = floorIndex;
         }
 
         private IEnumerator MoveElevatorAfterClosingDoors(int floorIndex){
@@ -68,40 +54,34 @@ namespace ElevatorSettings{
         }
 
         private IEnumerator OpenDoors(){
-            _doorsMoving = true;
-            doorAnimator.SetTrigger("OpenDoors");
-            yield return new WaitForSeconds(doorAnimationLength);
-            _doorsOpen = true;
-            _doorsMoving = false;
+            _elevatorParameters.DoorsMoving = true;
+            _elevatorParameters.DoorAnimator.SetTrigger("OpenDoors");
+            yield return new WaitForSeconds(_elevatorParameters.DoorAnimationLength);
+            _elevatorParameters.DoorsOpen = true;
+            _elevatorParameters.DoorsMoving = false;
             StartCoroutine(WaitForClosingDoors());
         }
 
         public void OpenClosingDoors(){
-            doorAnimator.SetTrigger("OpenClosingDoors");
-            _doorsOpen = true;
-            _doorsClosing = false;
+            _elevatorParameters.DoorAnimator.SetTrigger("OpenClosingDoors");
+            _elevatorParameters.DoorsOpen = true;
+            _elevatorParameters.DoorsClosing = false;
             StartCoroutine(WaitForClosingDoors());
         }
 
         private IEnumerator WaitForClosingDoors(){
-            yield return new WaitForSeconds(timeToCloseDoors);
+            yield return new WaitForSeconds(_elevatorParameters.TimeToCloseDoors);
             StartCoroutine(CloseDoors());
         }
 
         private IEnumerator CloseDoors(){
-            _doorsMoving = true;
-            _doorsClosing = true;
-            doorAnimator.SetTrigger("CloseDoors");
-            yield return new WaitForSeconds(doorAnimationLength);
-            _doorsClosing = false;
-            _doorsOpen = false;
-            _doorsMoving = false;
+            _elevatorParameters.DoorsMoving = true;
+            _elevatorParameters.DoorsClosing = true;
+            _elevatorParameters.DoorAnimator.SetTrigger("CloseDoors");
+            yield return new WaitForSeconds(_elevatorParameters.DoorAnimationLength);
+            _elevatorParameters.DoorsClosing = false;
+            _elevatorParameters.DoorsOpen = false;
+            _elevatorParameters.DoorsMoving = false;
         }
-
-        public bool ElevatorIsMoving => _elevatorIsMoving;
-        public bool DoorsOpen => _doorsOpen;
-        public bool DoorsMoving => _doorsMoving;
-
-        public bool DoorsClosing => _doorsClosing;
     }
 }

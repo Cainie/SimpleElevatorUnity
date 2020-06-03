@@ -1,17 +1,20 @@
-﻿using System.Collections;
+﻿using ElevatorSettings;
 using UnityEngine;
 
 namespace Environment{
     public class InteractibleButton : MonoBehaviour{
         [SerializeField] private int floorIndex;
-        private ElevatorSettings.ElevatorMovementManager _elevatorMovementManager;
+        private ElevatorMovementManager _elevatorMovementManager;
+        private ElevatorParameters _elevatorParameters;
 
-        public ElevatorSettings.ElevatorMovementManager ElevatorMovementManager{
-            set => _elevatorMovementManager = value;
+        public void SetElevatorScripts(ElevatorMovementManager elevatorMovementManager,
+                                       ElevatorParameters elevatorParameters){
+            _elevatorMovementManager = elevatorMovementManager;
+            _elevatorParameters = elevatorParameters;
         }
 
         public virtual void Interact(){
-            if (_elevatorMovementManager.ElevatorIsMoving || _elevatorMovementManager.DoorsMoving){ return; }
+            if (_elevatorParameters.ElevatorIsMoving || _elevatorParameters.DoorsMoving){ return; }
             _elevatorMovementManager.ElevatorButtonClicked(floorIndex);
         }
     }
