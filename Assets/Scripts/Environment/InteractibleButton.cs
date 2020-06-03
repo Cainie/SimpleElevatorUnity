@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Environment{
     public class InteractibleButton : MonoBehaviour{
-        [SerializeField] private Transform targetTransform;
-        private ElevatorSettings.ElevatorManager _elevatorManager;
+        [SerializeField] private int floorIndex;
+        private ElevatorSettings.ElevatorMovementManager _elevatorMovementManager;
 
-        public ElevatorSettings.ElevatorManager ElevatorManager{
-            set => _elevatorManager = value;
+        public ElevatorSettings.ElevatorMovementManager ElevatorMovementManager{
+            set => _elevatorMovementManager = value;
         }
 
         public virtual void Interact(){
-            if (_elevatorManager.ElevatorIsMoving){ return; }
-            StartCoroutine(_elevatorManager.MoveElevatorToTargetTransform(targetTransform));
+            if (_elevatorMovementManager.ElevatorIsMoving || _elevatorMovementManager.DoorsMoving){ return; }
+            _elevatorMovementManager.ElevatorButtonClicked(floorIndex);
         }
     }
 }
