@@ -4,11 +4,14 @@ using UnityEngine;
 
 namespace ElevatorSettings{
     [RequireComponent(typeof(ElevatorParameters))]
+    [RequireComponent(typeof(ElevatorSoundController))]
     public class ElevatorMovementManager : SerializedMonoBehaviour{
         
         private ElevatorParameters _elevatorParameters;
+        private ElevatorSoundController _elevatorSoundController;
         
         private void Awake(){
+            _elevatorSoundController = GetComponent<ElevatorSoundController>();
             _elevatorParameters = GetComponent<ElevatorParameters>();
             foreach (var interactibleButton in _elevatorParameters.ElevatorButtons){
                 interactibleButton.SetElevatorScripts(this,_elevatorParameters);
@@ -33,7 +36,9 @@ namespace ElevatorSettings{
         }
 
         private IEnumerator MoveElevatorToTargetTransform(int floorIndex){
+            _elevatorSoundController.PlayOnElevatorStartSound();
             _elevatorParameters.ElevatorIsMoving = true;
+            StartCoroutine(StartPlayingMusicAfterDelay());
             var targetTransform = _elevatorParameters.FloorTransforms[floorIndex];
             var targetPosition = targetTransform.position;
             var elevatorPosition = _elevatorParameters.ElevatorRigidbody.transform.position;
@@ -43,9 +48,16 @@ namespace ElevatorSettings{
                     Time.fixedDeltaTime * _elevatorParameters.ElevatorSpeed));
                 yield return null;
             }
+            _elevatorSoundController.StopElevatorMusic();
             StartCoroutine(OpenDoors());
             _elevatorParameters.ElevatorIsMoving = false;
             _elevatorParameters.CurrentlyActiveFloor = floorIndex;
+            _elevatorSoundController.PlayOnFloorArrivalSound();
+        }
+
+        private IEnumerator StartPlayingMusicAfterDelay(){
+            yield return new WaitForSeconds(_elevatorParameters.TimeToStartMusic);
+            _elevatorSoundController.StartElevatorMusic();
         }
 
         private IEnumerator MoveElevatorAfterClosingDoors(int floorIndex){
