@@ -32,6 +32,7 @@ namespace ElevatorSettings{
         }
 
         public void ElevatorButtonClicked(int floorIndex){
+            Debug.Log(_elevatorParameters.DoorsOpen);
             if (CheckIfTargetFloorIndexEqualsCurrentlyActiveFloor(floorIndex)){
                 OpenDoorsIfDoorsClosed();
                 return;
@@ -65,6 +66,11 @@ namespace ElevatorSettings{
         private void StopAllCoroutinesCloseDoorsAndMoveElevator(int floorIndex){
             StopAllCoroutines();
             StartCoroutine(MoveElevatorAfterClosingDoors(floorIndex));
+        }
+        
+        private IEnumerator MoveElevatorAfterClosingDoors(int floorIndex){
+            yield return CloseDoors();
+            StartElevatorMovementToTargetFloorIndex(floorIndex);
         }
 
         private IEnumerator MoveElevatorToTargetMoveIndex(int floorIndex){
@@ -125,10 +131,6 @@ namespace ElevatorSettings{
             _elevatorSoundController.StartElevatorMusic();
         }
 
-        private IEnumerator MoveElevatorAfterClosingDoors(int floorIndex){
-            yield return CloseDoors();
-            StartElevatorMovementToTargetFloorIndex(floorIndex);
-        }
 
         private IEnumerator OpenDoors(){
             SetParametersOnDoorsOpen();
