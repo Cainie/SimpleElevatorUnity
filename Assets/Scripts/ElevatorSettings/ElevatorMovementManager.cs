@@ -32,7 +32,6 @@ namespace ElevatorSettings{
         }
 
         public void ElevatorButtonClicked(int floorIndex){
-            Debug.Log(_elevatorParameters.DoorsOpen);
             if (CheckIfTargetFloorIndexEqualsCurrentlyActiveFloor(floorIndex)){
                 OpenDoorsIfDoorsClosed();
                 return;
