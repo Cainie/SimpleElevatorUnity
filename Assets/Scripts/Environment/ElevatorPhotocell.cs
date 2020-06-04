@@ -13,10 +13,17 @@ namespace Environment{
         }
 
         private void OnTriggerStay(Collider other){
-            if (_elevatorParameters.DoorsClosing){
-                _elevatorMovementManager.OpenClosingDoors();
+            if (CheckIfElevatorStateAllowsOpeningClosingDoors()){
+                OpenClosingDoors();
             }
-            
+        }
+
+        private bool CheckIfElevatorStateAllowsOpeningClosingDoors(){
+            return _elevatorParameters.DoorsClosing;
+        }
+
+        private void OpenClosingDoors(){
+            _elevatorMovementManager.OpenClosingDoors();
         }
     }
 }

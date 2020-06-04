@@ -21,6 +21,10 @@ namespace ElevatorSettings{
         private bool _doorsMoving;
         
         private void Awake(){
+            InitializeFields();
+        }
+
+        private void InitializeFields(){
             _elevatorRigidbody = GetComponent<Rigidbody>();
         }
 
