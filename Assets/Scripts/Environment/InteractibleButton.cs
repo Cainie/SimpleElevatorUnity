@@ -11,6 +11,10 @@ namespace Environment{
         private ElevatorParameters _elevatorParameters;
 
         private void Awake(){
+            InitializeFields();
+        }
+
+        private void InitializeFields(){
             _buttonAudioSource = GetComponent<AudioSource>();
         }
 
@@ -21,8 +25,20 @@ namespace Environment{
         }
 
         public virtual void Interact(){
+            PlayButtonClickedSound();
+            if (CheckIfElevatorStateAllowsButtonClick()){ return; }
+            ButtonClicked();
+        }
+
+        private void PlayButtonClickedSound(){
             _buttonAudioSource.PlayOneShot(clickingAudioClip);
-            if (_elevatorParameters.ElevatorIsMoving || _elevatorParameters.DoorsMoving){ return; }
+        }
+
+        private bool CheckIfElevatorStateAllowsButtonClick(){
+            return _elevatorParameters.ElevatorIsMoving || _elevatorParameters.DoorsMoving;
+        }
+
+        private void ButtonClicked(){
             _elevatorMovementManager.ElevatorButtonClicked(floorIndex);
         }
     }
